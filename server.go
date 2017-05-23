@@ -12,5 +12,6 @@ func main() {
 	})
 
 	http.HandleFunc("/gray", GrayScaleHandler)
+	http.HandleFunc("/binary", BinaryHandler)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }

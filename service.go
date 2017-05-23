@@ -7,11 +7,21 @@ import (
 	"net/url"
 )
 
+type handler func(file io.Reader) (io.Reader, error)
+
 func GrayScaleHandler(writer http.ResponseWriter, request *http.Request)  {
+	handleGeneric(writer, request, RGB2GrayScale)
+}
+
+func BinaryHandler(writer http.ResponseWriter, request *http.Request)  {
+	handleGeneric(writer, request, RGB2Binary)
+}
+
+func handleGeneric(writer http.ResponseWriter, request *http.Request, handleFunc handler)  {
 	file, err := extractImageOrFail(request)
 	if err != nil {
 		respond400(writer, err.Error())
-	} else if res, err := RGB2GrayScale(file); err == nil {
+	} else if res, err := handleFunc(file); err == nil {
 		respond200(writer, res)
 	} else {
 		respond500(writer, err.Error())
