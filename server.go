@@ -1,9 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
-	"fmt"
 )
 
 func main() {
@@ -13,5 +13,6 @@ func main() {
 
 	http.HandleFunc("/gray", GrayScaleHandler)
 	http.HandleFunc("/binary", BinaryHandler)
+	http.HandleFunc("/negative", NegativeHandler)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }

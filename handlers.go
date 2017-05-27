@@ -17,6 +17,10 @@ func BinaryHandler(writer http.ResponseWriter, request *http.Request) {
 	handleGeneric(writer, request, RGB2Binary)
 }
 
+func NegativeHandler(writer http.ResponseWriter, request *http.Request) {
+	handleGeneric(writer, request, RGB2Negative)
+}
+
 func handleGeneric(writer http.ResponseWriter, request *http.Request,
 	handleFunc handler) {
 	file, err := extractImageOrFail(request)

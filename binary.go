@@ -21,6 +21,7 @@ func RGB2Binary(file io.Reader) (io.Reader, error) {
 
 	for x := 0; x < xMax; x++ {
 		for y := 0; y < yMax; y++ {
+			// RGBA() for gray returns pixel ludacity
 			r, _, _, _ := grayImage.At(x, y).RGBA()
 			var col color.Color
 			if uint8(r) > threshold {
