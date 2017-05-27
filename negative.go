@@ -9,6 +9,7 @@ import (
 	"io"
 )
 
+// RGB2Negative converts rgb image to negative colors
 func RGB2Negative(file io.Reader) (io.Reader, error) {
 	img, _, err := image.Decode(file)
 	if err != nil {

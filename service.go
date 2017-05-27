@@ -9,6 +9,7 @@ import (
 	"io"
 )
 
+// Grayscale returns black and white image
 func Grayscale(file io.Reader) (*image.Gray, error) {
 	img, _, err := image.Decode(file)
 	if err != nil {
@@ -29,6 +30,7 @@ func Grayscale(file io.Reader) (*image.Gray, error) {
 	return gray, nil
 }
 
+// OtsuThreshold computes the Otsu's threshold for a b&w image
 func OtsuThreshold(m *image.Gray) uint8 {
 	hist := histogram(m)
 	sum := 0
@@ -36,7 +38,7 @@ func OtsuThreshold(m *image.Gray) uint8 {
 		sum += i * v
 	}
 	wB, wF := 0, len(m.Pix)
-	sumB, sumF := 0, sum
+	var sumB, sumF int
 	maxVariance := 0.0
 	threshold := uint8(0)
 	for t := 0; t < 256; t++ {
@@ -70,11 +72,12 @@ func histogram(m *image.Gray) []int {
 	return hist
 }
 
+// ImageToReader converts in-memory image to an io.Reader
 func ImageToReader(img image.Image) (io.Reader, error) {
 	buf := new(bytes.Buffer)
-	if err := png.Encode(buf, img); err == nil {
-		return bytes.NewReader(buf.Bytes()), nil
-	} else {
+	err := png.Encode(buf, img)
+	if err != nil {
 		return nil, err
 	}
+	return bytes.NewReader(buf.Bytes()), nil
 }

@@ -8,6 +8,7 @@ import (
 	"io"
 )
 
+// RGB2Binary converts the image file to a binary image
 func RGB2Binary(file io.Reader) (io.Reader, error) {
 	grayImage, err := Grayscale(file)
 	if err != nil {
@@ -21,10 +22,10 @@ func RGB2Binary(file io.Reader) (io.Reader, error) {
 
 	for x := 0; x < xMax; x++ {
 		for y := 0; y < yMax; y++ {
-			// RGBA() for gray returns pixel ludacity
-			r, _, _, _ := grayImage.At(x, y).RGBA()
+			// RGBA() for gray returns pixel intensity
+			intensity, _, _, _ := grayImage.At(x, y).RGBA()
 			var col color.Color
-			if uint8(r) > threshold {
+			if uint8(intensity) > threshold {
 				col = color.White
 			} else {
 				col = color.Black

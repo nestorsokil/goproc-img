@@ -9,14 +9,17 @@ import (
 
 type handler func(file io.Reader) (io.Reader, error)
 
+// GrayScaleHandler is a REST handle func for grayscale convertion
 func GrayScaleHandler(writer http.ResponseWriter, request *http.Request) {
 	handleGeneric(writer, request, RGB2GrayScale)
 }
 
+// BinaryHandler is a REST handle func for binary convertion
 func BinaryHandler(writer http.ResponseWriter, request *http.Request) {
 	handleGeneric(writer, request, RGB2Binary)
 }
 
+// NegativeHandler is a REST handle func for negative convertion
 func NegativeHandler(writer http.ResponseWriter, request *http.Request) {
 	handleGeneric(writer, request, RGB2Negative)
 }
@@ -52,11 +55,11 @@ func respond200(writer http.ResponseWriter, file io.Reader) {
 	io.Copy(writer, file)
 }
 
-type RequestError struct {
+type requestError struct {
 	desc string
 }
 
-func (re RequestError) Error() string {
+func (re requestError) Error() string {
 	return re.desc
 }
 
@@ -64,24 +67,25 @@ func extractImageOrFail(request *http.Request) (io.Reader, error) {
 	switch request.Method {
 	case "GET":
 		rq := request.URL.RawQuery
-		if values, err := url.ParseQuery(rq); err != nil {
-			return nil, RequestError{"Error parsing query string."}
-		} else {
-			if imageURL, ok := values["image"]; ok {
-				imageResponse, err := http.Get(imageURL[0])
-				if err != nil {
-					return nil, RequestError{"Unable to load image by URL."}
-				}
-				return imageResponse.Body, nil
-			} else {
-				return nil, RequestError{"Param 'image' is required."}
-			}
+		values, err := url.ParseQuery(rq)
+		if err != nil {
+			return nil, requestError{"Error parsing query string."}
 		}
+		if imageURL, ok := values["image"]; ok {
+			imageResponse, err := http.Get(imageURL[0])
+			if err != nil {
+				return nil, requestError{"Unable to load image by URL."}
+			}
+			return imageResponse.Body, nil
+		}
+		return nil, requestError{"Param 'image' is required."}
+
 	case "POST":
 		request.ParseMultipartForm(50 << 20) // 50 mb
 		f, _, err := request.FormFile("file")
 		return f, err
+
 	default:
-		return nil, RequestError{"Bad Request"}
+		return nil, requestError{"Bad Request"}
 	}
 }
