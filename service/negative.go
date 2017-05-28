@@ -1,4 +1,4 @@
-package main
+package service
 
 import (
 	"image"
@@ -7,6 +7,8 @@ import (
 	_ "image/jpeg"
 	_ "image/png"
 	"io"
+
+	"github.com/example/goproc-img/util"
 )
 
 // RGB2Negative converts rgb image to negative colors
@@ -25,7 +27,7 @@ func RGB2Negative(file io.Reader) (io.Reader, error) {
 			imgNeg.Set(x, y, neg)
 		}
 	}
-	return ImageToReader(imgNeg)
+	return util.ImageToReader(imgNeg)
 }
 
 func negative(col color.Color) color.Color {

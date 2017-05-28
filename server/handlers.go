@@ -1,27 +1,29 @@
-package main
+package server
 
 import (
 	"fmt"
 	"io"
 	"net/http"
 	"net/url"
+
+	"github.com/example/goproc-img/service"
 )
 
 type handler func(file io.Reader) (io.Reader, error)
 
 // GrayScaleHandler is a REST handle func for grayscale convertion
 func GrayScaleHandler(writer http.ResponseWriter, request *http.Request) {
-	handleGeneric(writer, request, RGB2GrayScale)
+	handleGeneric(writer, request, service.RGB2GrayScale)
 }
 
 // BinaryHandler is a REST handle func for binary convertion
 func BinaryHandler(writer http.ResponseWriter, request *http.Request) {
-	handleGeneric(writer, request, RGB2Binary)
+	handleGeneric(writer, request, service.RGB2Binary)
 }
 
 // NegativeHandler is a REST handle func for negative convertion
 func NegativeHandler(writer http.ResponseWriter, request *http.Request) {
-	handleGeneric(writer, request, RGB2Negative)
+	handleGeneric(writer, request, service.RGB2Negative)
 }
 
 func handleGeneric(writer http.ResponseWriter, request *http.Request,

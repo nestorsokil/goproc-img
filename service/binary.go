@@ -1,4 +1,4 @@
-package main
+package service
 
 import (
 	"image"
@@ -6,15 +6,17 @@ import (
 	_ "image/gif"
 	_ "image/jpeg"
 	"io"
+
+	"github.com/example/goproc-img/util"
 )
 
 // RGB2Binary converts the image file to a binary image
 func RGB2Binary(file io.Reader) (io.Reader, error) {
-	grayImage, err := Grayscale(file)
+	grayImage, err := util.Grayscale(file)
 	if err != nil {
 		return nil, err
 	}
-	threshold := OtsuThreshold(grayImage)
+	threshold := util.OtsuThreshold(grayImage)
 
 	bounds := grayImage.Bounds()
 	binImage := image.NewRGBA(bounds)
@@ -34,5 +36,5 @@ func RGB2Binary(file io.Reader) (io.Reader, error) {
 		}
 	}
 
-	return ImageToReader(binImage)
+	return util.ImageToReader(binImage)
 }

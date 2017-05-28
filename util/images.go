@@ -1,11 +1,9 @@
-package main
+package util
 
 import (
-	"bytes"
 	"image"
 	_ "image/gif"
 	_ "image/jpeg"
-	"image/png"
 	"io"
 )
 
@@ -70,14 +68,4 @@ func histogram(m *image.Gray) []int {
 		hist[m.Pix[i]]++
 	}
 	return hist
-}
-
-// ImageToReader converts in-memory image to an io.Reader
-func ImageToReader(img image.Image) (io.Reader, error) {
-	buf := new(bytes.Buffer)
-	err := png.Encode(buf, img)
-	if err != nil {
-		return nil, err
-	}
-	return bytes.NewReader(buf.Bytes()), nil
 }

@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+
+	"github.com/example/goproc-img/server"
 )
 
 func main() {
@@ -11,8 +13,8 @@ func main() {
 		fmt.Fprint(w, "Running...")
 	})
 
-	http.HandleFunc("/gray", GrayScaleHandler)
-	http.HandleFunc("/binary", BinaryHandler)
-	http.HandleFunc("/negative", NegativeHandler)
+	http.HandleFunc("/gray", server.GrayScaleHandler)
+	http.HandleFunc("/binary", server.BinaryHandler)
+	http.HandleFunc("/negative", server.NegativeHandler)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
