@@ -5,6 +5,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"strconv"
 
 	"github.com/example/goproc-img/service"
 )
@@ -24,6 +25,24 @@ func BinaryHandler(writer http.ResponseWriter, request *http.Request) {
 // NegativeHandler is a REST handle func for negative convertion
 func NegativeHandler(writer http.ResponseWriter, request *http.Request) {
 	handleGeneric(writer, request, service.RGB2Negative)
+}
+
+func ResizeHandler(writer http.ResponseWriter, request *http.Request) {
+	rq := request.URL.RawQuery
+	values, err := url.ParseQuery(rq)
+	widthStr := values["width"][0]
+	heightStr := values["height"][0]
+	width, _ := strconv.ParseUint(widthStr, 10, 32)
+	height, _ := strconv.ParseUint(heightStr, 10, 32)
+
+	file, err := extractImageOrFail(request)
+	if err != nil {
+		respond400(writer, err.Error())
+	} else if res, err := service.Resize(file, uint(width), uint(height)); err == nil {
+		respond200(writer, res)
+	} else {
+		respond500(writer, err.Error())
+	}
 }
 
 func handleGeneric(writer http.ResponseWriter, request *http.Request,

@@ -16,5 +16,7 @@ func main() {
 	http.HandleFunc("/gray", server.GrayScaleHandler)
 	http.HandleFunc("/binary", server.BinaryHandler)
 	http.HandleFunc("/negative", server.NegativeHandler)
+
+	http.HandleFunc("/resize", server.ResizeHandler)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
