@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/example/goproc-img/server"
+	"github.com/nestorsokil/goproc-img/server"
 )
 
 func main() {

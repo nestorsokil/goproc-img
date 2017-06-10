@@ -4,7 +4,7 @@ import (
 	"image"
 	"io"
 
-	"github.com/example/goproc-img/util"
+	"github.com/nestorsokil/goproc-img/util"
 	"github.com/nfnt/resize"
 )
 

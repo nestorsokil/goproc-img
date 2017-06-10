@@ -7,7 +7,7 @@ import (
 	_ "image/jpeg"
 	"io"
 
-	"github.com/example/goproc-img/util"
+	"github.com/nestorsokil/goproc-img/util"
 )
 
 // RGB2Binary converts the image file to a binary image

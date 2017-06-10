@@ -3,7 +3,7 @@ package service
 import (
 	"io"
 
-	"github.com/example/goproc-img/util"
+	"github.com/nestorsokil/goproc-img/util"
 )
 
 // RGB2GrayScale converts image file to black & white
