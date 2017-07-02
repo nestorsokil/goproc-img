@@ -7,7 +7,7 @@ import (
 	"net/url"
 	"strconv"
 
-	"github.com/nestorsokil/goproc-img/service"
+	"github.com/nestorsokil/goproc-img/transform-ms/service"
 )
 
 type handler func(file io.Reader) (io.Reader, error)

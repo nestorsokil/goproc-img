@@ -8,7 +8,7 @@ import (
 	_ "image/png"
 	"io"
 
-	"github.com/nestorsokil/goproc-img/util"
+	"github.com/nestorsokil/goproc-img/transform-ms/util"
 )
 
 // RGB2Negative converts rgb image to negative colors
