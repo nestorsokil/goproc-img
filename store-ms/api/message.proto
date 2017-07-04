@@ -1,0 +1,16 @@
+syntax = "proto3";
+package api;
+
+message SaveRequest {
+    string filename = 1;
+    bytes data = 2;
+}
+
+message SaveResult {
+    bool isOk = 1;
+    string error = 2;
+}
+
+service StoreService {
+    rpc SaveFile(SaveRequest) returns (SaveResult) {}
+}
