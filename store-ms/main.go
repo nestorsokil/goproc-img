@@ -11,11 +11,12 @@ import (
 	"encoding/json"
 	"time"
 	"path/filepath"
+	"github.com/nu7hatch/gouuid"
 )
 
 const (
 	CONFIG_FILE = "conf.json"
-	SLASH = string(filepath.Separator)
+	FS_SEP      = string(filepath.Separator)
 )
 
 type config struct {
@@ -30,41 +31,44 @@ type storeServer struct {
 }
 
 func (s *storeServer) SaveFile(ctx context.Context, req *api.SaveRequest) (*api.SaveResult, error) {
-	out, err := s.getFile(req.Filename)
+	var filename string
+	if req.Filename == "" {
+		id, err := uuid.NewV4()
+		if err != nil {
+			return nil, err
+		}
+		filename = id.String()
+	} else {
+		filename = req.Filename
+	}
+
+	today := time.Now().Local().Format("2006-01-02")
+	out, err := s.getFile(today, filename)
 	if err != nil {
 		return notOk(), err
 	}
+	defer out.Close()
 
 	_, err = out.Write(req.Data)
 	if err != nil {
 		return notOk(), err
 	}
 
-	url := s.config.StorageUrl + "/" + s.config.DataFolderPath + "/" + req.Filename
+	relPath := today + "/" + filename
+	url := s.config.StorageUrl + "/" + relPath
 	return ok(url), nil
 }
 
-func (s *storeServer) getFile(filename string) (*os.File, error) {
-	today := time.Now().Local().Format("yyyy-MM-dd")
-	folder := s.config.DataFolderPath + SLASH + today
-
-	if _, err := os.Stat(folder); os.IsNotExist(err) {
-		os.MkdirAll(folder, 0777)
+func (s *storeServer) getFile(folder, filename string) (*os.File, error) {
+	dir := s.config.DataFolderPath + FS_SEP + folder
+	if _, err := os.Stat(dir); os.IsNotExist(err) {
+		os.MkdirAll(dir, 0777)
 	}
 
-	path := folder + SLASH + filename
-	var out *os.File
-	defer out.Close()
-	if _, err := os.Stat(folder); os.IsNotExist(err) {
-		out, err = os.Create(path)
-		if err != nil {
-			return nil, err
-		}
-	} else {
-		out, err = os.Open(path)
-		if err != nil {
-			return nil, err
-		}
+	path := dir + FS_SEP + filename
+	out, err := os.OpenFile(path, os.O_CREATE, 0777)
+	if err != nil {
+		return nil, err
 	}
 	return out, nil
 }

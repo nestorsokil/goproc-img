@@ -1,5 +1,5 @@
 {
   "port" : 8081,
-  "storage_url" : "http://localhost:9999/data/",
+  "storage_url" : "http://localhost:9999",
   "data_folder_path" : "D:\\WorkingDir\\data"
 }
