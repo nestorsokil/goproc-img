@@ -37,6 +37,20 @@ func (s *storeServer) SaveFile(ctx context.Context, req *api.SaveRequest) (*api.
 	return ok(url), nil
 }
 
+func (s *storeServer) getFile(folder, filename string) (*os.File, error) {
+	dir := s.config.DataFolderPath + FS_SEP + folder
+	if _, err := os.Stat(dir); os.IsNotExist(err) {
+		os.MkdirAll(dir, 0777)
+	}
+
+	path := dir + FS_SEP + filename
+	out, err := os.OpenFile(path, os.O_CREATE, 0777)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func getFilename(request *api.SaveRequest) (string, error) {
 	if request.Filename != "" {
 		return request.Filename, nil
@@ -54,20 +68,6 @@ func createRandomFileName() (string, error) {
 		return nil, err
 	}
 	return id.String(), nil
-}
-
-func (s *storeServer) getFile(folder, filename string) (*os.File, error) {
-	dir := s.config.DataFolderPath + FS_SEP + folder
-	if _, err := os.Stat(dir); os.IsNotExist(err) {
-		os.MkdirAll(dir, 0777)
-	}
-
-	path := dir + FS_SEP + filename
-	out, err := os.OpenFile(path, os.O_CREATE, 0777)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
 }
 
 func ok(url string) *api.SaveResult {

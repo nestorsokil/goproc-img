@@ -32,7 +32,11 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed starting a listener on port %v.\nError: %v", conf.Port, err)
 	}
-	grpcServer := grpc.NewServer()
+
+	grpcServer := grpc.NewServer(
+		// options :
+		grpc.MaxRecvMsgSize(5 << 30),
+	)
 	api.RegisterStoreServiceServer(grpcServer, &storeServer{config:conf})
 	log.Printf("Starting grpc server on port %v\n", conf.Port)
 	grpcServer.Serve(listener)
