@@ -1,4 +1,4 @@
-package methods
+package handlers
 
 import (
 	"github.com/nestorsokil/goproc-img/api-ms/config"
@@ -16,13 +16,31 @@ const (
 	POST_FILE_NAME = "fileName"
 )
 
-type Handlers struct {
-	config config.ApiConfig
+// Package API:
+func StoreFileByPostData() http.HandlerFunc {
+	handler := http.HandlerFunc(storeFileByPostData)
+	if config.Settings.EnableJWTSecurity {
+		handler = doAuth(handler)
+	}
+	return handler
 }
 
-func (h Handlers) StoreFileByPostData(
-	response http.ResponseWriter, request *http.Request) {
+func StoreFileByUrl() http.HandlerFunc {
+	handler := http.HandlerFunc(storeFileByUrl)
+	if config.Settings.EnableJWTSecurity {
+		handler = doAuth(handler)
+	}
+	return handler
+}
 
+func DoPong() http.HandlerFunc {
+	return http.HandlerFunc(doPong)
+}
+
+
+// Private section:
+
+func storeFileByPostData(response http.ResponseWriter, request *http.Request) {
 	request.ParseMultipartForm(50 << 20) // 50 mb
 	data, _, err := request.FormFile(POST_FILE_DATA)
 	if err != nil {
@@ -30,7 +48,7 @@ func (h Handlers) StoreFileByPostData(
 		return
 	}
 	name := request.FormValue(POST_FILE_NAME)
-	client, err := util.GetClient(h.config.StoreMsUrl)
+	client, err := util.GetClient(config.Settings.StoreMsUrl)
 	if err != nil {
 		util.Respond400(response, err.Error())
 		return
@@ -43,13 +61,12 @@ func (h Handlers) StoreFileByPostData(
 	io.WriteString(response, url)
 }
 
-func (h Handlers) StoreFileByUrl(
-	response http.ResponseWriter, request *http.Request) {
+func storeFileByUrl(response http.ResponseWriter, request *http.Request) {
 	query := request.URL.Query()
 	imageUrl := query.Get(GET_FILE_URL)
 	imageName := query.Get(GET_FILE_NAME)
 	imageResponse, err := http.Get(imageUrl)
-	client, err := util.GetClient(h.config.StoreMsUrl)
+	client, err := util.GetClient(config.Settings.StoreMsUrl)
 	if err != nil {
 		util.Respond400(response, err.Error())
 		return
@@ -66,10 +83,6 @@ func (h Handlers) StoreFileByUrl(
 	io.WriteString(response, url)
 }
 
-func (h Handlers) DoPong(response http.ResponseWriter, _ *http.Request) {
+func doPong(response http.ResponseWriter, _ *http.Request)  {
 	io.WriteString(response, "Pong!")
-}
-
-func GetHandlers() Handlers {
-	return Handlers{config: config.LoadConfig()}
 }

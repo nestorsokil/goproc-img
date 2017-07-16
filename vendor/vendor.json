@@ -3,6 +3,30 @@
 	"ignore": "test",
 	"package": [
 		{
+			"checksumSHA1": "q1hQWV8i0LM0SYXRtoc7xgiImcM=",
+			"path": "github.com/auth0-community/auth0",
+			"revision": "09caa56e7d44bd2b2f6e7ddbd6e7c509f0ecb28c",
+			"revisionTime": "2017-06-15T13:38:33Z"
+		},
+		{
+			"checksumSHA1": "KINuoUfjPoHRf2fOfWmVHsmOh0s=",
+			"path": "github.com/auth0/go-jwt-middleware",
+			"revision": "5493cabe49f7bfa6e2ec444a09d334d90cd4e2bd",
+			"revisionTime": "2017-04-25T17:11:59Z"
+		},
+		{
+			"checksumSHA1": "IkAYIhxmvTQKEJvclIZJoVh9ats=",
+			"path": "github.com/dgrijalva/jwt-go",
+			"revision": "a539ee1a749a2b895533f979515ac7e6e0f5b650",
+			"revisionTime": "2017-06-08T00:51:49Z"
+		},
+		{
+			"checksumSHA1": "sQfEzFcb7I2+swbphLhX7+QSAKs=",
+			"path": "github.com/go-errors/errors",
+			"revision": "8fa88b06e5974e97fbf9899a7f86a344bfd1f105",
+			"revisionTime": "2016-12-05T22:32:45Z"
+		},
+		{
 			"checksumSHA1": "cAOtb8Ni26iTpUnv3T0TWl3uYHU=",
 			"path": "github.com/golang/protobuf/proto",
 			"revision": "6a1fa9404c0aebf36c879bc50152edcc953910d2",
@@ -205,6 +229,30 @@
 			"path": "google.golang.org/grpc/transport",
 			"revision": "3c33c26290b747350f8650c7d38bcc51b42dc785",
 			"revisionTime": "2017-06-27T16:54:34Z"
+		},
+		{
+			"checksumSHA1": "KBc2mKk6cIKTj2bD6iB70NIdYgw=",
+			"path": "gopkg.in/square/go-jose.v2",
+			"revision": "b25e6cab129e4a54675b42ea49d38e9c33ade9e6",
+			"revisionTime": "2017-06-07T17:41:08Z"
+		},
+		{
+			"checksumSHA1": "WiNNZBh/y4q6W0C2L4rkUd2NuSc=",
+			"path": "gopkg.in/square/go-jose.v2/cipher",
+			"revision": "b25e6cab129e4a54675b42ea49d38e9c33ade9e6",
+			"revisionTime": "2017-06-07T17:41:08Z"
+		},
+		{
+			"checksumSHA1": "H2vUbf4u9GqyZ1/48CDVkNQufjQ=",
+			"path": "gopkg.in/square/go-jose.v2/json",
+			"revision": "b25e6cab129e4a54675b42ea49d38e9c33ade9e6",
+			"revisionTime": "2017-06-07T17:41:08Z"
+		},
+		{
+			"checksumSHA1": "2Ki1/5t1wPxbhs8dukUI2u2QZ/c=",
+			"path": "gopkg.in/square/go-jose.v2/jwt",
+			"revision": "b25e6cab129e4a54675b42ea49d38e9c33ade9e6",
+			"revisionTime": "2017-06-07T17:41:08Z"
 		}
 	],
 	"rootPath": "github.com/nestorsokil/goproc-img"

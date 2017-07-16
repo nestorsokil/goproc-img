@@ -1,3 +1,9 @@
 {
-  "store_ms_url" : "localhost:8081"
+  "store_ms_url" : "localhost:8081",
+  "enable_jwt_security" : false,
+  "audience" : [" ", " "],
+  "auth_0_domain_name" : "https://test.example.auth0.com/",
+  "private_key" : "qwerty",
+  "log_file_path" : "log/api-ms.log",
+  "port" : ":8080"
 }

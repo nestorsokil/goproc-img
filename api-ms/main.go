@@ -2,13 +2,15 @@ package main
 
 import (
 
-	"github.com/nestorsokil/goproc-img/api-ms/methods"
+	"github.com/nestorsokil/goproc-img/api-ms/handlers"
 	"log"
 	"net/http"
 	"os"
 	"fmt"
 	"github.com/gorilla/mux"
-	"github.com/gorilla/handlers"
+	wrappers "github.com/gorilla/handlers"
+	"github.com/nestorsokil/goproc-img/api-ms/config"
+	"path/filepath"
 )
 
 const (
@@ -17,28 +19,33 @@ const (
 )
 
 func main() {
-	file, err := os.OpenFile("api.log",
-		os.O_RDWR | os.O_CREATE | os.O_APPEND, 0666)
+	logDir := filepath.Dir(config.Settings.LogFilePath)
+	if logDir != "" {
+		err := os.MkdirAll(logDir, os.ModePerm)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+	logFile, err := os.OpenFile(config.Settings.LogFilePath, os.O_CREATE, 0666)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer file.Close()
-	log.SetOutput(file)
+	defer logFile.Close()
 
-	h := methods.GetHandlers()
+
+	log.SetOutput(logFile)
 	router := mux.NewRouter()
 
-	router.Handle(PING_PATH, http.HandlerFunc(h.DoPong)).Methods("GET")
-	router.Handle(UPLOAD_PATH, http.HandlerFunc(h.StoreFileByUrl)).Methods("GET")
-	router.Handle(UPLOAD_PATH, http.HandlerFunc(h.StoreFileByPostData)).Methods("POST")
+	router.Handle(PING_PATH, handlers.DoPong()).Methods("GET")
+	router.Handle(UPLOAD_PATH, handlers.StoreFileByUrl()).Methods("GET")
+	router.Handle(UPLOAD_PATH, handlers.StoreFileByPostData()).Methods("POST")
 
-	withLogging := handlers.LoggingHandler(file, router)
+	withLogging := wrappers.LoggingHandler(logFile, router)
 
-	msg := "[INFO] Starting server on 8080."
-	stat, _ := file.Stat()
+	msg := fmt.Sprintf("[INFO] Starting server on %v.", config.Settings.Port)
 	log.Println(msg)
-	fmt.Println(msg, "Server log is available in", stat.Name())
+	fmt.Println(msg, "Server log is available in", config.Settings.LogFilePath)
 
 
-	http.ListenAndServe(":8080", withLogging)
+	http.ListenAndServe(config.Settings.Port, withLogging)
 }
