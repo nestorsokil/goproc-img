@@ -7,7 +7,8 @@ import (
 	"golang.org/x/net/context"
 )
 
-func SaveImage(filename string, content io.Reader, client api.StoreServiceClient) (url string, err error){
+func SaveImage(filename string, content io.Reader, client api.StoreServiceClient)(url string, err error){
+
 	if err != nil {
 		return "", err
 	}
@@ -20,4 +21,5 @@ func SaveImage(filename string, content io.Reader, client api.StoreServiceClient
 		return "", err
 	}
 	return result.URL, nil
+
 }

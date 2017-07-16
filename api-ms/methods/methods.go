@@ -1,12 +1,11 @@
-package handler
+package methods
 
 import (
-	"net/http"
-	"github.com/julienschmidt/httprouter"
-	"io"
-	"github.com/nestorsokil/goproc-img/api-ms/util"
-	"github.com/nestorsokil/goproc-img/api-ms/service"
 	"github.com/nestorsokil/goproc-img/api-ms/config"
+	"github.com/nestorsokil/goproc-img/api-ms/service"
+	"github.com/nestorsokil/goproc-img/api-ms/util"
+	"io"
+	"net/http"
 )
 
 const (
@@ -21,7 +20,9 @@ type Handlers struct {
 	config config.ApiConfig
 }
 
-func (h Handlers) StoreImageByPostData(response http.ResponseWriter, request *http.Request,  _ httprouter.Params) {
+func (h Handlers) StoreFileByPostData(
+	response http.ResponseWriter, request *http.Request) {
+
 	request.ParseMultipartForm(50 << 20) // 50 mb
 	data, _, err := request.FormFile(POST_FILE_DATA)
 	if err != nil {
@@ -42,7 +43,8 @@ func (h Handlers) StoreImageByPostData(response http.ResponseWriter, request *ht
 	io.WriteString(response, url)
 }
 
-func (h Handlers) StoreImageByUrl(response http.ResponseWriter, request *http.Request, _ httprouter.Params) {
+func (h Handlers) StoreFileByUrl(
+	response http.ResponseWriter, request *http.Request) {
 	query := request.URL.Query()
 	imageUrl := query.Get(GET_FILE_URL)
 	imageName := query.Get(GET_FILE_NAME)
@@ -64,10 +66,10 @@ func (h Handlers) StoreImageByUrl(response http.ResponseWriter, request *http.Re
 	io.WriteString(response, url)
 }
 
-func (h Handlers) DoPong(response http.ResponseWriter, _ *http.Request,  _ httprouter.Params) {
+func (h Handlers) DoPong(response http.ResponseWriter, _ *http.Request) {
 	io.WriteString(response, "Pong!")
 }
 
 func GetHandlers() Handlers {
-	return Handlers{config:config.LoadConfig()}
+	return Handlers{config: config.LoadConfig()}
 }
