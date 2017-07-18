@@ -15,6 +15,7 @@ import (
 
 const (
 	PING_PATH   = "/ping"
+	LOGIN_PATH  = "/login"
 	UPLOAD_PATH = "/api/v1/upload"
 )
 
@@ -39,6 +40,7 @@ func main() {
 	router.Handle(PING_PATH, handlers.DoPong()).Methods("GET")
 	router.Handle(UPLOAD_PATH, handlers.StoreFileByUrl()).Methods("GET")
 	router.Handle(UPLOAD_PATH, handlers.StoreFileByPostData()).Methods("POST")
+	router.Handle(LOGIN_PATH, handlers.DoLogin()).Methods("POST")
 
 	withLogging := wrappers.LoggingHandler(logFile, router)
 

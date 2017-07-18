@@ -37,6 +37,14 @@ func DoPong() http.HandlerFunc {
 	return http.HandlerFunc(doPong)
 }
 
+func DoLogin() http.HandlerFunc {
+	if config.Settings.EnableJWTSecurity {
+		return http.HandlerFunc(doLogin)
+	} else {
+		return http.HandlerFunc(doLoginStub)
+	}
+}
+
 
 // Private section:
 
